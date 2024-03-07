@@ -7,8 +7,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Get the module name
       - uses: actions/checkout@v2
+      - name: Get the module name
         run: |
           echo "Module Name: ${{ github.event.client_payload.moduleName }}"
 
