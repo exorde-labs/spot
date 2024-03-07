@@ -1,0 +1,13 @@
+on:
+  repository_dispatch:
+    types: [trigger-build-event]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get the module name
+        run: |
+          echo "Module Name: ${{ github.event.client_payload.moduleName }}"
+          # You can now use this parameter to conditionally execute steps or pass it to scripts/actions
