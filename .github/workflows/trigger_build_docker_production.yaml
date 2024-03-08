@@ -9,7 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
       - name: Get Latest Release
         id: get-latest-release
         run: |
@@ -33,12 +32,12 @@ jobs:
           context: .
           file: "./Dockerfile"
           build-args: |
-            "RELEASE_VERSION=${{LATEST_RELEASE_TAG}}.${{ github.event.client_payload.moduleTag }}"
-            "MODULE_NAME=${{ github.event.client_payload.moduleName }}"
+            RELEASE_VERSION=${{ env.LATEST_RELEASE_TAG }}.${{ github.event.client_payload.moduleTag }}
+            MODULE_NAME=${{ github.event.client_payload.moduleName }}
           platforms: |
             linux/amd64
             linux/arm64
           push: true
           tags: |
-            exordelabs/spot${{ github.event.client_payload.moduleName }}:${{LATEST_RELEASE_TAG}}.${{ github.event.release.tag_name }}
+            exordelabs/spot${{ github.event.client_payload.moduleName }}:${{ env.LATEST_RELEASE_TAG }}.${{ github.event.client_payload.moduleTag }}
             exordelabs/spot${{ github.event.client_payload.moduleName }}:latest
