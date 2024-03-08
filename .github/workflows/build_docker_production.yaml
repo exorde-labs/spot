@@ -18,6 +18,8 @@ jobs:
             ORGANIZATION: 'exorde-labs'
             TOPIC: 'exorde-spot-driver'
           run: |
+            echo "topic = $TOPIC"
+            echo "org = $ORGANIZATION"
             # Fetch the list of repositories from GitHub API
             REPOS=$(curl -s -H "Authorization: token $REPOSITORY_ACCESS" \
                           -H "Accept: application/vnd.github+json" \
