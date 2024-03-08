@@ -47,6 +47,5 @@ jobs:
                 TARGET_REPO="spot"
                 JSON_DATA="{\"event_type\": \"trigger-build-event\", \"client_payload\": {\"moduleName\": \"$REPO\", \"moduleTag\": \"$LATEST_TAG\"}}"
                 echo "data : $JSON_DATA"
-                curl -X POST -H "Accept: application/vnd.github.v3+json" -H "Authorization: token $REPOSITORY_ACCESS"  https://api.github.com/repos/exorde-labs/spot/dispatches -d "$JSON_DATA"
-
+                gh api repos/exorde-labs/spot/dispatches -X POST -f accept=application/vnd.github.v3+json -f Authorization="token $REPOSITORY_ACCESS" -F event_type='trigger-build-event' -F client_payload='{"moduleName":"'$REPO'", "moduleTag":"'$LATEST_TAG'"}'
             done
