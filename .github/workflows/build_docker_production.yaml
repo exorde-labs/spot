@@ -44,14 +44,13 @@ jobs:
                 echo "Latest tag for $REPO is $LATEST_TAG, triggering build"
 
                 # The target repository where you want to trigger the dispatch event
-                TARGET_OWNER="exorde-labs"
                 TARGET_REPO="spot"
                 JSON_DATA="{\"event_type\": \"trigger-build-event\", \"client_payload\": {\"moduleName\": \"$REPO\", \"moduleTag\": \"$LATEST_TAG\"}}"
                 echo "data : $JSON_DATA"
                 RESPONSE=$(curl --http1.1 -X POST -s -w "\n%{http_code}" \
                   -H "Accept: application/vnd.github.v3+json" \
                   -H "Authorization: token $REPOSITORY_ACCESS" \
-                  "https://api.github.com/repos/$TARGET_OWNER/$TARGET_REPO/dispatches" \
+                  "https://api.github.com/repos/exorde-labs/spot/dispatches" \
                   -d "$JSON_DATA")
 
                 BODY=$(echo "$RESPONSE" | head -n -1)
