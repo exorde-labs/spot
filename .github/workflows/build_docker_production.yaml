@@ -46,7 +46,7 @@ jobs:
                 # The target repository where you want to trigger the dispatch event
                 TARGET_OWNER="exorde-labs"
                 TARGET_REPO="spot"
-                JSON_DATA="{\"event_type\": \"trigger-build-event\", \"client_payload\": {\"moduleName\": \"$REPO\", \"moduleTag\": \"$LATEST_TAG\"}}")
+                JSON_DATA="{\"event_type\": \"trigger-build-event\", \"client_payload\": {\"moduleName\": \"$REPO\", \"moduleTag\": \"$LATEST_TAG\"}}"
                 echo "data : $JSON_DATA"
                 RESPONSE=$(curl --http1.1 -X POST -s -w "\n%{http_code}" \
                   -H "Accept: application/vnd.github.v3+json" \
