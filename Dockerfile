@@ -1,5 +1,8 @@
 FROM python:3.10.11 as base
 
+ARG RELEASE_VERSION
+ARG MODULE_NAME
+
 # Update and install dependencies
 RUN apt-get update \
     && apt-get upgrade -y \
@@ -21,12 +24,8 @@ RUN pip3.10 install pandas \
 
 RUN pip3.10 install --no-cache-dir --upgrade "git+https://github.com/exorde-labs/exorde_data"
 FROM base as with_module
-
 RUN pip3.10 install --no-cache-dir --upgrade "git+https://github.com/exorde-labs/${MODULE_NAME}"
-
 RUN apt-get update && \
     apt-get install -y git && \
     rm -rf /var/lib/apt/lists/*
-
-
 COPY ./src /app 
