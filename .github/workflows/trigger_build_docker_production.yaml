@@ -1,4 +1,4 @@
-name: Release of ${{ github.event.client_payload.moduleName }}"
+name: Build & Publish
 
 on:
   repository_dispatch:
@@ -9,10 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Get the module name
-        run: |
-          echo "Module Name: ${{ github.event.client_payload.moduleName }}"
-          echo "Module Tag: ${{ github.event.client_payload.moduleTag }}"
 
       - name: Get Latest Release
         id: get-latest-release
@@ -30,7 +26,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_LOGIN }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      - name: Build and push Docker image
+      - name: Build and push ${{ github.event.client_payload.moduleName }}
         id: build-and-push
         uses: docker/build-push-action@v4
         with:
