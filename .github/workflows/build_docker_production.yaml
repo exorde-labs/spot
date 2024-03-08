@@ -34,8 +34,7 @@ jobs:
             for REPO in $REPOS; do
                 echo "Trigger $REPO build"
                 # Fetch the latest tag for the repository
-                LATEST_TAG=$(curl -s -H "Authorization: token $REPOSITORY_ACCESS" \
-                                   -H "Accept: application/vnd.github+json" \
+                LATEST_TAG=$(curl -s -H "Accept: application/vnd.github+json" \
                                    "https://api.github.com/repos/$ORGANIZATION/$REPO/tags" \
                              | jq -r '.[0].name')
                 if [ -z "$LATEST_TAG" ]; then
