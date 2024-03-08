@@ -47,11 +47,16 @@ jobs:
                 TARGET_OWNER="exorde-labs"
                 TARGET_REPO="spot"
 
-                # Trigger a repository dispatch event in the target repository
-                curl -X POST \
+
+                RESPONSE=$(curl -X POST -s -w "\n%{http_code}" \
                   -H "Accept: application/vnd.github.v3+json" \
                   -H "Authorization: token $REPOSITORY_ACCESS" \
                   "https://api.github.com/repos/${TARGET_OWNER}/${TARGET_REPO}/dispatches" \
-                  -d "{\"event_type\": \"trigger-build-event\", \"client_payload\": {\"moduleName\": \"$REPO\", \"moduleTag\": \"$LATEST_TAG\"}}"
-             
-              done
+                  -d "{\"event_type\": \"trigger-build-event\", \"client_payload\": {\"moduleName\": \"$REPO\", \"moduleTag\": \"$LATEST_TAG\"}}")
+
+                BODY=$(echo "$RESPONSE" | head -n -1)
+                HTTP_STATUS=$(echo "$RESPONSE" | tail -n 1)
+
+                echo "Response Body: $BODY"
+                echo "HTTP Status: $HTTP_STATUS"
+            done
