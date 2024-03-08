@@ -18,6 +18,8 @@ jobs:
             ORGANIZATION: 'exorde-labs'
             TOPIC: 'exorde-spot-driver'
           run: |
+            echo 'topic = $TOPIC'
+            echo 'organization = $ORGANIZATION'
             # Bash script to list repositories by topic & org and trigger actions
             REPOS=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
                           -H "Accept: application/vnd.github+json" \
