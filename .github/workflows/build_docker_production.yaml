@@ -52,7 +52,7 @@ jobs:
                   -H "Accept: application/vnd.github.v3+json" \
                   -H "Authorization: token $REPOSITORY_ACCESS" \
                   "https://api.github.com/repos/${TARGET_OWNER}/${TARGET_REPO}/dispatches" \
-                  -d "$JSON_DATA"
+                  -d "$JSON_DATA")
 
                 BODY=$(echo "$RESPONSE" | head -n -1)
                 HTTP_STATUS=$(echo "$RESPONSE" | tail -n 1)
