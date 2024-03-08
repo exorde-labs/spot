@@ -14,12 +14,12 @@ jobs:
 
         - name: Trigger Builds for Repositories by Topic
           env:
-            GITHUB_TOKEN: ${{ secrets.REPOSITORY_ACCESS }}
+            REPOSITORY_ACCESS: ${{ secrets.REPOSITORY_ACCESS }}
             ORGANIZATION: 'exorde-labs'
             TOPIC: 'exorde-spot-driver'
           run: |
             # Fetch the list of repositories from GitHub API
-            REPOS=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+            REPOS=$(curl -s -H "Authorization: token $REPOSITORY_ACCESS" \
                           -H "Accept: application/vnd.github+json" \
                           "https://api.github.com/search/repositories?q=topic:$TOPIC+org:$ORGANIZATION" \
                     | jq -r '.items[] .full_name | split("/") | .[1]')
@@ -33,7 +33,7 @@ jobs:
             for REPO in $REPOS; do
                 echo "Trigger $REPO build"
                 # Fetch the latest tag for the repository
-                LATEST_TAG=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+                LATEST_TAG=$(curl -s -H "Authorization: token $REPOSITORY_ACCESS" \
                                    -H "Accept: application/vnd.github+json" \
                                    "https://api.github.com/repos/$ORGANIZATION/$REPO/tags" \
                              | jq -r '.[0].name')
@@ -44,7 +44,7 @@ jobs:
                 echo "Latest tag for $REPO is $LATEST_TAG"
                 curl -X POST \
                   -H "Accept: application/vnd.github.v3+json" \
-                  -H "Authorization: token $GITHUB_TOKEN" \
+                  -H "Authorization: token $REPOSITORY_ACCESS" \
                   https://api.github.com/repos/exorde-labs/scrap/dispatches \
             -d '{"event_type": "trigger-build-event", "client_payload": {"moduleName": "$REPO", "moduleTag": "$LATEST_TAG"}}' 
             done
