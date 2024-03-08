@@ -1,0 +1,49 @@
+name: Spot Release
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+jobs:
+    notify-build:
+    name: Launch builds
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Trigger Builds for Repositories by Topic
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPOSITORY_ACCESS }}
+          ORGANIZATION: 'exorde-labs'
+          TOPIC: 'exorde-spot-driver'
+        run: |
+          # Bash script to list repositories by topic & org and trigger actions
+          REPOS=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+                        -H "Accept: application/vnd.github+json" \
+                        "https://api.github.com/search/repositories?q=topic:$TOPIC+org:$ORGANIZATION" \
+                  | jq -r '.items[] .full_name | split("/") | .[1]')
+          
+          if [ -z "$REPOS" ]; then
+              echo "No repositories found for topic $TOPIC in organization $ORGANIZATION"
+              exit 1
+          fi
+
+          for REPO in $REPOS; do
+              echo "Trigger $REPO build"
+              # Fetch the latest tag for the repository
+              LATEST_TAG=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+                                 -H "Accept: application/vnd.github+json" \
+                                 "https://api.github.com/repos/$ORGANIZATION/$REPO/tags" \
+                           | jq -r '.[0].name')
+              if [ -z "$LATEST_TAG" ]; then
+                  echo "No tags found for repository $REPO"
+                  continue
+              fi
+              echo "Latest tag for $REPO is $LATEST_TAG"
+              curl -X POST \
+                -H "Accept: application/vnd.github.v3+json" \
+                -H "Authorization: token $GITHUB_TOKEN" \
+                https://api.github.com/repos/exorde-labs/scrap/dispatches \
+          -d '{"event_type": "trigger-build-event", "client_payload": {"moduleName": "$REPO", "moduleTag": "$LATEST_TAG"}}' 
+          done
