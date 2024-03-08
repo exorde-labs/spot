@@ -56,6 +56,6 @@ jobs:
                       \"event_type\": \"trigger-build-event\",\
                       \"client_payload\": {\
                         \"moduleName\": \"${REPO}\"},\
-                        \"moduleTag\": \"${LATEST_TAG}\"}"
+                        \"moduleTag\": \"${LATEST_TAG}\"}" -v
              
               done
