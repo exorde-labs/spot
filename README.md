@@ -1,4 +1,4 @@
-# Exorde Scrap
+# Exorde Spot
 
 | Flavor | Image size |
 | --- | --- |
