@@ -48,7 +48,7 @@ jobs:
                 TARGET_REPO="spot"
 
 
-                RESPONSE=$(curl -X POST -s -w "\n%{http_code}" \
+                RESPONSE=$(curl --http1.1 -X POST -s -w "\n%{http_code}" \
                   -H "Accept: application/vnd.github.v3+json" \
                   -H "Authorization: token $REPOSITORY_ACCESS" \
                   "https://api.github.com/repos/${TARGET_OWNER}/${TARGET_REPO}/dispatches" \
