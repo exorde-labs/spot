@@ -28,4 +28,7 @@ RUN pip3.10 install --no-cache-dir --upgrade "git+https://github.com/exorde-labs
 RUN apt-get update && \
     apt-get install -y git && \
     rm -rf /var/lib/apt/lists/*
-COPY ./src /app 
+COPY ./src /app
+
+ENV scraper_module="${MODULE_NAME}"
+CMD ["python3.10", "/app/scraper.py"]
