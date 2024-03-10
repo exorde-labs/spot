@@ -31,4 +31,4 @@ RUN apt-get update && \
 COPY ./src /app
 
 ENV scraper_module="${MODULE_NAME}"
-CMD ["python3.10", "/app/scraper.py"]
+ENTRYPOINT ["python3.10", "/app/scraper.py"]
