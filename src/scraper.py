@@ -185,7 +185,7 @@ def start_scraper():
     tracer = trace.get_tracer(__name__)
     with tracer.start_as_current_span("service_init") as init_span:
         try:
-            port = int(os.environ.get("PORT", "8080"))
+            port = int(os.environ.get("PORT", "8000"))
             logging.info(f"Hello World ! I'm {scraper_module_name} running on {port}")
             logging.info(f"Will push data to: {os.environ.get('spotting_target')}")
             signal.signal(signal.SIGINT, terminate)
