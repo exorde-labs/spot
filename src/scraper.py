@@ -106,7 +106,7 @@ async def push_item(url, item):
 async def get_target():
     async def fetch_ips_from_service(filter_key, filter_value):
         # The base URL of the service where the endpoint is hosted
-        base_url = "http://container_scout:8080/get"
+        base_url = "http://container_scout:8000/get"
         
         # Construct the full URL with query parameters for filtering
         query_params = {filter_key: filter_value}
@@ -184,8 +184,8 @@ def start_scraper():
     setup_tracing(scraper_module_name)
     tracer = trace.get_tracer(__name__)
     with tracer.start_as_current_span("service_init") as init_span:
+        port = int(os.environ.get("PORT", "8000"))
         try:
-            port = int(os.environ.get("PORT", "8000"))
             logging.info(f"Hello World ! I'm {scraper_module_name} running on {port}")
             logging.info(f"Will push data to: {os.environ.get('spotting_target')}")
             signal.signal(signal.SIGINT, terminate)
