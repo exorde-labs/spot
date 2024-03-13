@@ -106,7 +106,7 @@ async def push_item(url, item):
 async def get_target():
     async def fetch_ips_from_service(filter_key, filter_value):
         # The base URL of the service where the endpoint is hosted
-        base_url = "http://container_scout:8000/get"
+        base_url = "http://orchestrator:8000/get"
         
         # Construct the full URL with query parameters for filtering
         query_params = {filter_key: filter_value}
