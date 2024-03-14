@@ -13,9 +13,7 @@ A [`docker-compose.yaml`](./docker-compose.yaml) is generated and provides an ea
 ```shell
 rss=2 docker compose up -d
 ```
-
-Will launch two rss instances
-
+Will launch two rss instances.
 
 ## Overview
 
