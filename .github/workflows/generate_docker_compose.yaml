@@ -1,0 +1,33 @@
+name: Update Docker Compose
+
+on: 
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  update-compose:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.10'
+
+    - name: Configure Git
+      run: |
+        git config user.name 'github-actions'
+        git config user.email 'github-actions@github.com'
+
+    - name: Remove Existing docker-compose.yaml
+      run: rm -f docker-compose.yaml
+
+    - name: Generate docker-compose.yaml
+      run: python generate_docker_compose.py > docker-compose.yaml
+
+    - name: Commit and Push
+      run: |
+        git add docker-compose.yaml
+        git commit -m "Update docker-compose.yaml" || echo "No changes to commit"
+        git push origin HEAD:main

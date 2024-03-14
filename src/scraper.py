@@ -21,8 +21,7 @@ from keywords import choose_keyword
 
 from aioprometheus.collectors import Counter
 
-push_counter = Counter("push", "Number of items pushed to spotting blades")
-
+push_counter = Counter("push", "Number of items pushed")
 
 
 def setup_tracing(module: str):
