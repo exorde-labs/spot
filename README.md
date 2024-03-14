@@ -18,7 +18,7 @@ Will launch two rss instances.
 
 ### :warning: Important
 - There is **no orchestration mechanism** when you launch your spotters this way.
-- They will be staticly launched and **the configuration is 100% under your control.**
+- They will be staticly launched and **the module distribution usage is 100% under your control.**
 
 ## Overview
 
