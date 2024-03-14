@@ -38,6 +38,9 @@ for repo in repos:
     print(f"""  
   {repo}:
     restart: always
+    labels:
+        - "network.exorde.monitor=true"
+        - "network.exorde.service=spot"
     image: exordelabs/spot{repo}
     networks: exorde-network
     init: true
