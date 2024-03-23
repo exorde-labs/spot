@@ -104,20 +104,17 @@ async def push_item(url, item):
 
 async def get_target():
     async def fetch_ips_from_service(filter_key, filter_value):
-        # The base URL of the service where the endpoint is hosted
-        base_url = "http://orchestrator:8000/get"
-        
-        # Construct the full URL with query parameters for filtering
+        """
+        """
+        orchestrator_name = os.getenv("ORCHESTRATOR_NAME", "orchestrator")
+        base_url = f"http://{orchestrator_name}:8000/get"
         query_params = {filter_key: filter_value}
         async with ClientSession() as session:
             async with session.get(base_url, params=query_params) as response:
-                # Check if the request was successful
                 if response.status == 200:
-                    # Parse the response as JSON and return the data
                     ips = await response.json()
                     return ips
                 else:
-                    # Handle errors or unexpected response status
                     error_message = await response.text()
                     print(f"Failed to fetch IPs: {error_message}")
                     return []
