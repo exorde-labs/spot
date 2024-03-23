@@ -3,48 +3,44 @@ version: '3'
 
 services:
   
-  nostr5fa856e7234fbee:
-    restart: always
-    image: exordelabs/spotnostr5fa856e7234fbee
-    networks: exorde-network
-    init: true
-    deploy:
-      replicas: ${nos:-0}
-  
-  bitcointalk4de40ec26:
-    restart: always
-    image: exordelabs/spotbitcointalk4de40ec26
-    networks: exorde-network
-    init: true
-    deploy:
-      replicas: ${bit:-0}
-  
-  ch4875eda56be56000ac:
-    restart: always
-    image: exordelabs/spotch4875eda56be56000ac
-    networks: exorde-network
-    init: true
-    deploy:
-      replicas: ${ch4:-0}
-  
   jvc8439846094ced03ff:
     restart: always
+    labels:
+        - "network.exorde.monitor=true"
+        - "network.exorde.service=spot"
     image: exordelabs/spotjvc8439846094ced03ff
     networks: exorde-network
     init: true
     deploy:
       replicas: ${jvc:-0}
   
-  rss007d0675444aa13fc:
+  bitcointalk4de40ec26:
     restart: always
-    image: exordelabs/spotrss007d0675444aa13fc
+    labels:
+        - "network.exorde.monitor=true"
+        - "network.exorde.service=spot"
+    image: exordelabs/spotbitcointalk4de40ec26
     networks: exorde-network
     init: true
     deploy:
-      replicas: ${rss:-0}
+      replicas: ${bit:-0}
+  
+  nostr5fa856e7234fbee:
+    restart: always
+    labels:
+        - "network.exorde.monitor=true"
+        - "network.exorde.service=spot"
+    image: exordelabs/spotnostr5fa856e7234fbee
+    networks: exorde-network
+    init: true
+    deploy:
+      replicas: ${nos:-0}
   
   seekingalphad89ba32s:
     restart: always
+    labels:
+        - "network.exorde.monitor=true"
+        - "network.exorde.service=spot"
     image: exordelabs/spotseekingalphad89ba32s
     networks: exorde-network
     init: true
@@ -53,14 +49,42 @@ services:
   
   forocoches86019fc2d4:
     restart: always
+    labels:
+        - "network.exorde.monitor=true"
+        - "network.exorde.service=spot"
     image: exordelabs/spotforocoches86019fc2d4
     networks: exorde-network
     init: true
     deploy:
       replicas: ${for:-0}
   
+  ch4875eda56be56000ac:
+    restart: always
+    labels:
+        - "network.exorde.monitor=true"
+        - "network.exorde.service=spot"
+    image: exordelabs/spotch4875eda56be56000ac
+    networks: exorde-network
+    init: true
+    deploy:
+      replicas: ${ch4:-0}
+  
+  rss007d0675444aa13fc:
+    restart: always
+    labels:
+        - "network.exorde.monitor=true"
+        - "network.exorde.service=spot"
+    image: exordelabs/spotrss007d0675444aa13fc
+    networks: exorde-network
+    init: true
+    deploy:
+      replicas: ${rss:-0}
+  
   lemmyw04b6eb792ca4a1:
     restart: always
+    labels:
+        - "network.exorde.monitor=true"
+        - "network.exorde.service=spot"
     image: exordelabs/spotlemmyw04b6eb792ca4a1
     networks: exorde-network
     init: true
@@ -69,6 +93,9 @@ services:
   
   wei223be19ab11e891bo:
     restart: always
+    labels:
+        - "network.exorde.monitor=true"
+        - "network.exorde.service=spot"
     image: exordelabs/spotwei223be19ab11e891bo
     networks: exorde-network
     init: true
@@ -77,6 +104,9 @@ services:
   
   hackbc9419ab11eebe56:
     restart: always
+    labels:
+        - "network.exorde.monitor=true"
+        - "network.exorde.service=spot"
     image: exordelabs/spothackbc9419ab11eebe56
     networks: exorde-network
     init: true
@@ -85,6 +115,9 @@ services:
   
   masto65ezfd86424f69a:
     restart: always
+    labels:
+        - "network.exorde.monitor=true"
+        - "network.exorde.service=spot"
     image: exordelabs/spotmasto65ezfd86424f69a
     networks: exorde-network
     init: true
@@ -93,6 +126,9 @@ services:
   
   ap98j3envoubi3fco1kc:
     restart: always
+    labels:
+        - "network.exorde.monitor=true"
+        - "network.exorde.service=spot"
     image: exordelabs/spotap98j3envoubi3fco1kc
     networks: exorde-network
     init: true
@@ -101,6 +137,9 @@ services:
   
   a7df32de3a60dfdb7a0b:
     restart: always
+    labels:
+        - "network.exorde.monitor=true"
+        - "network.exorde.service=spot"
     image: exordelabs/spota7df32de3a60dfdb7a0b
     networks: exorde-network
     init: true
@@ -111,8 +150,22 @@ services:
       - SCWEET_USERNAME=${SCWEET_USERNAME}
       - SCWEET_PASSWORD=${SCWEET_PASSWORD}
   
+  youtube00e1f862e5eff:
+    restart: always
+    labels:
+        - "network.exorde.monitor=true"
+        - "network.exorde.service=spot"
+    image: exordelabs/spotyoutube00e1f862e5eff
+    networks: exorde-network
+    init: true
+    deploy:
+      replicas: ${you:-0}
+  
   followinc645fc950d7f:
     restart: always
+    labels:
+        - "network.exorde.monitor=true"
+        - "network.exorde.service=spot"
     image: exordelabs/spotfollowinc645fc950d7f
     networks: exorde-network
     init: true
@@ -121,19 +174,14 @@ services:
   
   tradview251ae30a11ee:
     restart: always
+    labels:
+        - "network.exorde.monitor=true"
+        - "network.exorde.service=spot"
     image: exordelabs/spottradview251ae30a11ee
     networks: exorde-network
     init: true
     deploy:
       replicas: ${tra:-0}
-  
-  youtube00e1f862e5eff:
-    restart: always
-    image: exordelabs/spotyoutube00e1f862e5eff
-    networks: exorde-network
-    init: true
-    deploy:
-      replicas: ${you:-0}
 
 networks:
   exorde-network:
