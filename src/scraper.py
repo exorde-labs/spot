@@ -44,7 +44,7 @@ async def metrics(request):
 async def healthcheck(request):
     return web.Response(status=200)
 
-def terminate(signal, frame):
+def terminate(signal):
     logging.info("Bye !")
     os._exit(0)
 
@@ -102,6 +102,7 @@ async def push_item(url, item):
                 logging.exception("An error occured while pushing an item")
                 push_item_span.record_exception(e)
 
+
 async def get_target():
     async def fetch_ips_from_service(filter_key, filter_value):
         """
@@ -121,6 +122,7 @@ async def get_target():
 
     targets = await fetch_ips_from_service("network.exorde.service", "upipe")
     return random.choice(targets)
+
 
 async def scraping_task(app):
     tracer = trace.get_tracer(__name__)
@@ -168,7 +170,6 @@ app = web.Application()
 app.router.add_get("/", healthcheck)
 app.router.add_get("/metrics", metrics)
 app.on_startup.append(start_scraping_task)
-app.on_cleanup.append(terminate)
 
 def start_scraper():
     logging.basicConfig(
