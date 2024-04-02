@@ -88,7 +88,6 @@ async def get_generator(app):
             os._exit(-1)
     return generator
 
-
 async def push_item(url, item):
     tracer = trace.get_tracer(__name__)
     with tracer.start_as_current_span("push_item") as push_item_span:
@@ -104,9 +103,10 @@ async def push_item(url, item):
 
 
 async def get_target():
-    async def fetch_ips_from_service(filter_key, filter_value):
-        """
-        """
+    """Asks the orchestrator for a list of `upipes`"""
+    async def fetch_ips_from_service(
+        filter_key: str, filter_value:str
+    ) -> list[str]:
         orchestrator_name = os.getenv("ORCHESTRATOR_NAME", "orchestrator")
         base_url = f"http://{orchestrator_name}:8000/get"
         query_params = {filter_key: filter_value}
@@ -119,9 +119,12 @@ async def get_target():
                     error_message = await response.text()
                     print(f"Failed to fetch IPs: {error_message}")
                     return []
-
+    """ retrieves a list of upipes """
     targets = await fetch_ips_from_service("network.exorde.service", "upipe")
-    return random.choice(targets)
+    logging.info(f"get_target.targets = {targets}")
+    choice = random.choice(targets)
+    logging.info(f"get_target.choice = {choice}")
+    return choice
 
 
 async def scraping_task(app):
@@ -178,7 +181,8 @@ def start_scraper():
     )
     scraper_module_name = os.environ.get("scraper_module", None)
     assert scraper_module_name
-    setup_tracing(scraper_module_name)
+    if os.getenv("TRACE", False):
+        setup_tracing(scraper_module_name)
     tracer = trace.get_tracer(__name__)
     with tracer.start_as_current_span("service_init") as init_span:
         port = int(os.environ.get("PORT", "8000"))

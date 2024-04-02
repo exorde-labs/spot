@@ -1,6 +1,5 @@
 FROM python:3.10.11 as base
 
-ARG RELEASE_VERSION
 ARG MODULE_NAME
 
 # Update and install dependencies
