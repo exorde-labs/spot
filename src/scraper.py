@@ -124,7 +124,7 @@ async def get_target():
             logging.exception("Failed to fetch IPS")
             return []
     """ retrieves a list of upipes """
-    pre_loaded_targets = os.getenv('', '')
+    pre_loaded_targets = os.getenv('UPIPE_ADDR', '')
     if len(pre_loaded_targets) == 0:
         targets = await fetch_ips_from_service("network.exorde.service", "upipe")
     else:
