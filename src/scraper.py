@@ -110,21 +110,31 @@ async def get_target():
         orchestrator_name = os.getenv("ORCHESTRATOR_NAME", "orchestrator")
         base_url = f"http://{orchestrator_name}:8000/get"
         query_params = {filter_key: filter_value}
-        async with ClientSession() as session:
-            async with session.get(base_url, params=query_params) as response:
-                if response.status == 200:
-                    ips = await response.json()
-                    return ips
-                else:
-                    error_message = await response.text()
-                    print(f"Failed to fetch IPs: {error_message}")
-                    return []
+        try:
+            async with ClientSession() as session:
+                async with session.get(base_url, params=query_params) as response:
+                    if response.status == 200:
+                        ips = await response.json()
+                        return ips
+                    else:
+                        error_message = await response.text()
+                        logging.info(f"Failed to fetch IPs: {error_message}")
+                        return []
+        except:
+            logging.exception("Failed to fetch IPS")
+            return []
     """ retrieves a list of upipes """
-    targets = await fetch_ips_from_service("network.exorde.service", "upipe")
+    pre_loaded_targets = os.getenv('', '')
+    if len(pre_loaded_targets) == 0:
+        targets = await fetch_ips_from_service("network.exorde.service", "upipe")
+    else:
+        targets = pre_loaded_targets.split(',')
     logging.info(f"get_target.targets = {targets}")
-    choice = random.choice(targets)
-    logging.info(f"get_target.choice = {choice}")
-    return choice
+    if len(targets) > 1:
+        choice = random.choice(targets)
+        logging.info(f"get_target.choice = {choice}")
+        return choice
+    return None
 
 
 async def scraping_task(app):
@@ -160,7 +170,11 @@ async def scraping_task(app):
                 logging.exception("An error occured while iterating")
         if item:
             target = await get_target()
-            await push_item(target, item)
+            if target:
+                await push_item(target, item)
+            else:
+                logging.info("Found no valid to push to, skipping item")
+                logging.info(item)
             push_counter.inc({"module": app["module_name"]})
         await asyncio.sleep(1)
 
