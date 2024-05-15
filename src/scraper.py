@@ -13,11 +13,12 @@ from opentelemetry.trace import StatusCode
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.sdk.trace import TracerProvider
 
-import logging, os, signal, asyncio, random
+import logging, os, signal, asyncio
 from importlib import import_module
 
 from scraper_configuration import get_scrapers_configuration
 from keywords import choose_keyword
+from exorde_data.get_target import get_target
 
 from aioprometheus.collectors import Counter
 
@@ -101,41 +102,10 @@ async def push_item(url, item):
                 logging.exception("An error occured while pushing an item")
                 push_item_span.record_exception(e)
 
-
-async def get_target():
-    """Asks the orchestrator for a list of `upipes`"""
-    async def fetch_ips_from_service(
-        filter_key: str, filter_value:str
-    ) -> list[str]:
-        orchestrator_name = os.getenv("ORCHESTRATOR_NAME", "orchestrator")
-        base_url = f"http://{orchestrator_name}:8000/get"
-        query_params = {filter_key: filter_value}
-        try:
-            async with ClientSession() as session:
-                async with session.get(base_url, params=query_params) as response:
-                    if response.status == 200:
-                        ips = await response.json()
-                        return ips
-                    else:
-                        error_message = await response.text()
-                        logging.info(f"Failed to fetch IPs: {error_message}")
-                        return []
-        except:
-            logging.exception("Failed to fetch IPS")
-            return []
-    """ retrieves a list of upipes """
-    pre_loaded_targets = os.getenv('UPIPE_ADDR', '')
-    if len(pre_loaded_targets) == 0:
-        targets = await fetch_ips_from_service("network.exorde.service", "upipe")
-    else:
-        targets = pre_loaded_targets.split(',')
-    logging.info(f"get_target.targets = {targets}")
-    if len(targets) > 1:
-        choice = random.choice(targets)
-        logging.info(f"get_target.choice = {choice}")
-        return choice
-    return None
-
+def log_environment():
+    logging.info("Environment Variables:")
+    for key, value in os.environ.items():
+        logging.info(f"{key}: {value}")
 
 async def scraping_task(app):
     tracer = trace.get_tracer(__name__)
@@ -169,11 +139,12 @@ async def scraping_task(app):
                 item = None
                 logging.exception("An error occured while iterating")
         if item:
-            target = await get_target()
+            target = await get_target("upipe", "UPIPE_ADDR")
+            logging.info(f"pushing target is {target}")
             if target:
                 await push_item(target, item)
             else:
-                logging.info("Found no valid to push to, skipping item")
+                logging.info("Found no valid target to push to, skipping item")
                 logging.info(item)
             push_counter.inc({"module": app["module_name"]})
         await asyncio.sleep(1)

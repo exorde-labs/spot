@@ -21,7 +21,7 @@ RUN pip3.10 install pandas \
         opentelemetry-instrumentation-aiohttp-client \
         opentelemetry-sdk opentelemetry-exporter-otlp
 
-RUN pip3.10 install --no-cache-dir --upgrade "git+https://github.com/exorde-labs/exorde_data"
+RUN pip3.10 install --no-cache-dir --upgrade "git+https://github.com/exorde-labs/exorde_data@full"
 
 FROM base as with_module
 RUN pip3.10 install --no-cache-dir --upgrade "git+https://github.com/exorde-labs/${MODULE_NAME}"
