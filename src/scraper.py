@@ -147,7 +147,7 @@ async def scraping_task(app):
                 logging.info("Found no valid target to push to, skipping item")
                 logging.info(item)
             push_counter.inc({"module": app["module_name"]})
-        await asyncio.sleep(1)
+        await asyncio.sleep(int(os.getenv("SLEEP_BETWEEN_ITEMS", 1)))
 
 async def start_scraping_task(app):
     global SHUTDOWN
