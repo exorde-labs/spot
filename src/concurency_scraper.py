@@ -29,7 +29,8 @@ module_list = [
     "tradview251ae30a11ee",
     "bitcointalk4de40ec26",
     "hackbc9419ab11eebe56",
-    "jvc8439846094ced03ff"
+    "jvc8439846094ced03ff",
+    "bluesky5f61dce7fa034"
 ]
 
 push_counter = Counter("push", "Number of data pushed to spotting blades")
